@@ -116,7 +116,7 @@ class EventCalendarState extends State<EventCalendar> {
           : meetingDetails.eventName;
       _notes = meetingDetails.description;
       _selectedResourceIndex =
-          _nameCollection.indexOf(meetingDetails.ids.toString());
+         _nameCollection.indexOf(calendarTapDetails.resource.displayName);
       _selectedAppointment = meetingDetails;
     } else {
       final DateTime date = calendarTapDetails.date;
