@@ -1,6 +1,8 @@
 part of event_calendar;
 
 class AppointmentEditor extends StatefulWidget {
+  const AppointmentEditor({super.key});
+
   @override
   AppointmentEditorState createState() => AppointmentEditorState();
 }
@@ -22,11 +24,11 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                 },
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 25,
                     color: Colors.black,
                     fontWeight: FontWeight.w400),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Add title',
                 ),
@@ -38,7 +40,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
             ),
             ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                leading: Icon(
+                leading: const Icon(
                   Icons.access_time,
                   color: Colors.black54,
                 ),
@@ -72,7 +74,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                                     .format(_startDate),
                                 textAlign: TextAlign.left),
                             onTap: () async {
-                              final DateTime date = await showDatePicker(
+                              final DateTime? date = await showDatePicker(
                                 context: context,
                                 initialDate: _startDate,
                                 firstDate: DateTime(1900),
@@ -108,7 +110,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                                 textAlign: TextAlign.right,
                               ),
                               onTap: () async {
-                                final TimeOfDay time = await showTimePicker(
+                                final TimeOfDay? time = await showTimePicker(
                                     context: context,
                                     initialTime: TimeOfDay(
                                         hour: _startTime.hour,
@@ -148,7 +150,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                               textAlign: TextAlign.left,
                             ),
                             onTap: () async {
-                              final DateTime date = await showDatePicker(
+                              final DateTime? date = await showDatePicker(
                                 context: context,
                                 initialDate: _endDate,
                                 firstDate: DateTime(1900),
@@ -186,7 +188,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                                 textAlign: TextAlign.right,
                               ),
                               onTap: () async {
-                                final TimeOfDay time = await showTimePicker(
+                                final TimeOfDay? time = await showTimePicker(
                                     context: context,
                                     initialTime: TimeOfDay(
                                         hour: _endTime.hour,
@@ -217,7 +219,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                     ])),
             ListTile(
               contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-              leading: Icon(
+              leading: const Icon(
                 Icons.public,
                 color: Colors.black87,
               ),
@@ -259,7 +261,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
             ),
             ListTile(
               contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-              leading: Icon(Icons.person_pin),
+              leading: const Icon(Icons.person_pin),
               title: Text(
                 _nameCollection[_selectedResourceIndex],
               ),
@@ -279,7 +281,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
             ),
             ListTile(
               contentPadding: const EdgeInsets.all(5),
-              leading: Icon(
+              leading: const Icon(
                 Icons.subject,
                 color: Colors.black87,
               ),
@@ -290,11 +292,11 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                 },
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 18,
                     color: Colors.black87,
                     fontWeight: FontWeight.w400),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Add description',
                 ),
@@ -309,7 +311,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
   }
 
   @override
-  Widget build([BuildContext context]) {
+  Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -335,10 +337,10 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                     onPressed: () {
                       final List<Meeting> meetings = <Meeting>[];
                       if (_selectedAppointment != null) {
-                        _events.appointments.removeAt(
-                            _events.appointments.indexOf(_selectedAppointment));
+                        _events.appointments!.removeAt(
+                            _events.appointments!.indexOf(_selectedAppointment));
                         _events.notifyListeners(CalendarDataSourceAction.remove,
-                            <Meeting>[]..add(_selectedAppointment));
+                            <Meeting>[]..add(_selectedAppointment!));
                       }
                       meetings.add(Meeting(
                         from: _startDate,
@@ -353,10 +355,10 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                         description: _notes,
                         isAllDay: _isAllDay,
                         eventName: _subject == '' ? '(No title)' : _subject,
-                        ids: <String>[_employeeCollection[_selectedResourceIndex].id]
+                        ids: <String>[_employeeCollection[_selectedResourceIndex].id.toString()]
                       ));
 
-                      _events.appointments.add(meetings[0]);
+                      _events.appointments!.add(meetings[0]);
 
                       _events.notifyListeners(
                           CalendarDataSourceAction.add, meetings);
@@ -377,17 +379,17 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                 : FloatingActionButton(
               onPressed: () {
                 if (_selectedAppointment != null) {
-                  _events.appointments.removeAt(
-                      _events.appointments.indexOf(_selectedAppointment));
+                  _events.appointments!.removeAt(
+                      _events.appointments!.indexOf(_selectedAppointment));
                   _events.notifyListeners(CalendarDataSourceAction.remove,
-                      <Meeting>[]..add(_selectedAppointment));
+                      <Meeting>[]..add(_selectedAppointment!));
                   _selectedAppointment = null;
                   Navigator.pop(context);
                 }
               },
+              backgroundColor: Colors.red,
               child:
               const Icon(Icons.delete_outline, color: Colors.white),
-              backgroundColor: Colors.red,
             )));
   }
 

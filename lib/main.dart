@@ -20,34 +20,33 @@ void main() => runApp(const MaterialApp(
 
 //ignore: must_be_immutable
 class EventCalendar extends StatefulWidget {
-  const EventCalendar({Key key}) : super(key: key);
+  const EventCalendar({super.key});
 
   @override
   EventCalendarState createState() => EventCalendarState();
 }
 
-List<Color> _colorCollection;
-List<String> _colorNames;
+late List<Color> _colorCollection;
+late List<String> _colorNames;
 int _selectedColorIndex = 0;
 int _selectedTimeZoneIndex = 0;
 int _selectedResourceIndex = 0;
-List<String> _timeZoneCollection;
-DataSource _events;
-Meeting _selectedAppointment;
-DateTime _startDate;
-TimeOfDay _startTime;
-DateTime _endDate;
-TimeOfDay _endTime;
-bool _isAllDay;
+late List<String> _timeZoneCollection;
+late DataSource _events;
+Meeting? _selectedAppointment;
+late DateTime _startDate;
+late TimeOfDay _startTime;
+late DateTime _endDate;
+late TimeOfDay _endTime;
+late bool _isAllDay;
 String _subject = '';
 String _notes = '';
-List<CalendarResource> _employeeCollection;
-List<String> _nameCollection;
+late List<CalendarResource> _employeeCollection;
+late List<String> _nameCollection;
 
 class EventCalendarState extends State<EventCalendar> {
-  EventCalendarState();
 
-  List<String> _eventNameCollection;
+  late List<String> _eventNameCollection;
   @override
   void initState() {
     _addResourceDetails();
@@ -64,16 +63,15 @@ class EventCalendarState extends State<EventCalendar> {
   }
 
   @override
-  Widget build([BuildContext context]) {
+  Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
         body: Padding(
             padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
             child: SafeArea(
                 child: SfCalendar(
                     view: CalendarView.timelineDay,
-                    allowedViews: <CalendarView>[
+                    allowedViews: const <CalendarView>[
                       CalendarView.timelineDay,
                       CalendarView.timelineWeek,
                       CalendarView.timelineWorkWeek,
@@ -81,7 +79,7 @@ class EventCalendarState extends State<EventCalendar> {
                     ],
                     dataSource: _events,
                     onTap: onCalendarTapped,
-                    monthViewSettings: MonthViewSettings(
+                    monthViewSettings: const MonthViewSettings(
                         appointmentDisplayMode:
                             MonthAppointmentDisplayMode.appointment),
                 ))));
@@ -102,8 +100,8 @@ class EventCalendarState extends State<EventCalendar> {
     _notes = '';
 
     if (calendarTapDetails.appointments != null &&
-        calendarTapDetails.appointments.length == 1) {
-      final Meeting meetingDetails = calendarTapDetails.appointments[0];
+        calendarTapDetails.appointments?.length == 1) {
+      final Meeting meetingDetails = calendarTapDetails.appointments![0];
       _startDate = meetingDetails.from;
       _endDate = meetingDetails.to;
       _isAllDay = meetingDetails.isAllDay;
@@ -116,10 +114,10 @@ class EventCalendarState extends State<EventCalendar> {
           : meetingDetails.eventName;
       _notes = meetingDetails.description;
       _selectedResourceIndex =
-         _nameCollection.indexOf(calendarTapDetails.resource.displayName);
+         _nameCollection.indexOf(calendarTapDetails.resource!.displayName);
       _selectedAppointment = meetingDetails;
     } else {
-      final DateTime date = calendarTapDetails.date;
+      final DateTime date = calendarTapDetails!.date!;
       _startDate = date;
       _endDate = date.add(const Duration(hours: 1));
     }
@@ -298,11 +296,11 @@ class EventCalendarState extends State<EventCalendar> {
 
     final Random random = Random();
     for (int i = 0; i < _employeeCollection.length; i++) {
-      final List<String> _employeeIds = <String>[_employeeCollection[i].id];
+      final List<String> _employeeIds = <String>[_employeeCollection[i].id.toString()];
       if (i == _employeeCollection.length - 1) {
         int index = random.nextInt(5);
         index = index == i ? index + 1 : index;
-        _employeeIds.add(_employeeCollection[index].id);
+        _employeeIds.add(_employeeCollection[index].id.toString());
       }
       for (int j = 0; j < 4; j++) {
         final DateTime date = DateTime.now();
@@ -318,7 +316,7 @@ class EventCalendarState extends State<EventCalendar> {
             background: _colorCollection[random.nextInt(8)],
             startTimeZone: '',
             endTimeZone: '',
-            ids: <String>[_employeeCollection[i].id]));
+            ids: <String>[_employeeCollection[i].id.toString()]));
       }
     }
     return meetingCollection;
@@ -368,46 +366,46 @@ class DataSource extends CalendarDataSource {
   }
 
   @override
-  bool isAllDay(int index) => appointments[index].isAllDay;
+  bool isAllDay(int index) => appointments![index].isAllDay;
 
   @override
-  String getSubject(int index) => appointments[index].eventName;
+  String getSubject(int index) => appointments![index].eventName;
 
   @override
-  String getStartTimeZone(int index) => appointments[index].startTimeZone;
+  String getStartTimeZone(int index) => appointments![index].startTimeZone;
 
   @override
-  String getNotes(int index) => appointments[index].description;
+  String getNotes(int index) => appointments![index].description;
 
   @override
-  String getEndTimeZone(int index) => appointments[index].endTimeZone;
+  String getEndTimeZone(int index) => appointments![index].endTimeZone;
 
   @override
-  Color getColor(int index) => appointments[index].background;
+  Color getColor(int index) => appointments![index].background;
 
   @override
-  DateTime getStartTime(int index) => appointments[index].from;
+  DateTime getStartTime(int index) => appointments![index].from;
 
   @override
-  DateTime getEndTime(int index) => appointments[index].to;
+  DateTime getEndTime(int index) => appointments![index].to;
 
   @override
   List<String> getResourceIds(int index) {
-    return appointments[index].ids;
+    return appointments![index].ids;
   }
 }
 
 class Meeting {
   Meeting(
-      {@required this.from,
-      @required this.to,
+      {required this.from,
+      required this.to,
       this.background = Colors.green,
       this.isAllDay = false,
       this.eventName = '',
       this.startTimeZone = '',
       this.endTimeZone = '',
       this.description = '',
-      this.ids});
+      required this.ids});
 
   final String eventName;
   final DateTime from;
