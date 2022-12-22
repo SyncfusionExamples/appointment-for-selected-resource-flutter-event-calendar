@@ -6,6 +6,8 @@ Using the [CalendarResource](https://pub.dev/documentation/syncfusion_flutter_ca
 
 In this example, you can add appointments to any of the resources by using the resource picker from the editor window.
 
+![Resource](https://user-images.githubusercontent.com/46158936/209060800-a6b414c8-1920-477c-be08-385f2a5f4f5a.gif)
+
 For more details , you can refer to our UG documentation [ResourceView](https://help.syncfusion.com/flutter/calendar/resource-view)
 
 ## Requirements to run the demo
